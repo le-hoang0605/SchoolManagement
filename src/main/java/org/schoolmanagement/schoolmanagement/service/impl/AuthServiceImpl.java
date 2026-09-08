@@ -3,13 +3,19 @@ package org.schoolmanagement.schoolmanagement.service.impl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.schoolmanagement.schoolmanagement.dto.request.AdminRegisterRequestDTO;
+import org.schoolmanagement.schoolmanagement.dto.request.LoginRequestDTO;
 import org.schoolmanagement.schoolmanagement.dto.request.RegisterRequestDTO;
+import org.schoolmanagement.schoolmanagement.dto.response.JwtAuthResponseDTO;
 import org.schoolmanagement.schoolmanagement.dto.response.UserResponseDTO;
 import org.schoolmanagement.schoolmanagement.entity.Role;
 import org.schoolmanagement.schoolmanagement.entity.User;
 import org.schoolmanagement.schoolmanagement.exception.EmailExistsException;
+import org.schoolmanagement.schoolmanagement.exception.UserNotFoundException;
 import org.schoolmanagement.schoolmanagement.repository.UserRepository;
+import org.schoolmanagement.schoolmanagement.security.JwtTokenProvider;
 import org.schoolmanagement.schoolmanagement.service.AuthService;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +26,8 @@ import java.time.LocalDate;
 public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     @Transactional
@@ -67,6 +75,21 @@ public class AuthServiceImpl implements AuthService {
         User savedUser = userRepository.save(user);
 
         return mapToResponseDTO((savedUser));
+    }
+
+    @Override
+    public JwtAuthResponseDTO login(LoginRequestDTO loginRequestDTO) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequestDTO.getEmail(),
+                        loginRequestDTO.getPassword()
+                )
+        );
+        User user = userRepository.findByEmail(loginRequestDTO.getEmail())
+                .orElseThrow(() -> new UserNotFoundException("User not found!"));
+
+        String token = jwtTokenProvider.generateToken(user);
+        return new JwtAuthResponseDTO(token);
     }
 
     private UserResponseDTO mapToResponseDTO(User user) {

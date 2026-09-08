@@ -14,4 +14,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("SELECT MAX(u.userIdNumber) FROM User u WHERE u.userIdNumber LIKE CONCAT(:prefix,'%')")
     Optional<String> findMaxUserIdNumberByPrefix(@Param("prefix") String prefix);
+
+    Optional<User> findByEmail(String email);
 }
