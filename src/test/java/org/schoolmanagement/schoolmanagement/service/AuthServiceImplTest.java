@@ -10,7 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.schoolmanagement.schoolmanagement.dto.request.AdminRegisterRequestDTO;
 import org.schoolmanagement.schoolmanagement.dto.request.RegisterRequestDTO;
 import org.schoolmanagement.schoolmanagement.dto.response.UserResponseDTO;
-import org.schoolmanagement.schoolmanagement.entity.Role;
+import org.schoolmanagement.schoolmanagement.entity.enumEntity.Role;
 import org.schoolmanagement.schoolmanagement.entity.User;
 import org.schoolmanagement.schoolmanagement.exception.EmailExistsException;
 import org.schoolmanagement.schoolmanagement.repository.UserRepository;

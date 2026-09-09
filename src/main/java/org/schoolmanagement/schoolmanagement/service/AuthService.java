@@ -1,6 +1,7 @@
 package org.schoolmanagement.schoolmanagement.service;
 
 import org.schoolmanagement.schoolmanagement.dto.request.AdminRegisterRequestDTO;
+import org.schoolmanagement.schoolmanagement.dto.request.ChangePasswordRequestDTO;
 import org.schoolmanagement.schoolmanagement.dto.request.LoginRequestDTO;
 import org.schoolmanagement.schoolmanagement.dto.request.RegisterRequestDTO;
 import org.schoolmanagement.schoolmanagement.dto.response.JwtAuthResponseDTO;
@@ -12,4 +13,8 @@ public interface AuthService {
     UserResponseDTO adminRegister(AdminRegisterRequestDTO requestDTO);
 
     JwtAuthResponseDTO login(LoginRequestDTO loginRequestDTO);
+
+    UserResponseDTO getCurrentUser(String email);
+
+    void changePassword(ChangePasswordRequestDTO changePasswordRequestDTO, String email);
 }

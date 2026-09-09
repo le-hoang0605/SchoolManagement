@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.schoolmanagement.schoolmanagement.entity.enumEntity.PostType;
 
 import java.time.LocalDateTime;
 

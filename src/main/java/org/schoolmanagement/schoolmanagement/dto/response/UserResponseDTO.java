@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.schoolmanagement.schoolmanagement.entity.Gender;
-import org.schoolmanagement.schoolmanagement.entity.Role;
+import org.schoolmanagement.schoolmanagement.entity.enumEntity.Gender;
+import org.schoolmanagement.schoolmanagement.entity.enumEntity.Role;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

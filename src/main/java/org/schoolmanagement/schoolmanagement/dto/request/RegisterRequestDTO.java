@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.schoolmanagement.schoolmanagement.entity.Gender;
+import org.schoolmanagement.schoolmanagement.entity.enumEntity.Gender;
 
 import java.time.LocalDate;
 

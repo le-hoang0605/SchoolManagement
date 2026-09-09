@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.schoolmanagement.schoolmanagement.entity.enumEntity.EventType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

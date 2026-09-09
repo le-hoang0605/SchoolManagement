@@ -3,13 +3,15 @@ package org.schoolmanagement.schoolmanagement.service.impl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.schoolmanagement.schoolmanagement.dto.request.AdminRegisterRequestDTO;
+import org.schoolmanagement.schoolmanagement.dto.request.ChangePasswordRequestDTO;
 import org.schoolmanagement.schoolmanagement.dto.request.LoginRequestDTO;
 import org.schoolmanagement.schoolmanagement.dto.request.RegisterRequestDTO;
 import org.schoolmanagement.schoolmanagement.dto.response.JwtAuthResponseDTO;
 import org.schoolmanagement.schoolmanagement.dto.response.UserResponseDTO;
-import org.schoolmanagement.schoolmanagement.entity.Role;
+import org.schoolmanagement.schoolmanagement.entity.enumEntity.Role;
 import org.schoolmanagement.schoolmanagement.entity.User;
 import org.schoolmanagement.schoolmanagement.exception.EmailExistsException;
+import org.schoolmanagement.schoolmanagement.exception.IncorrectPasswordException;
 import org.schoolmanagement.schoolmanagement.exception.UserNotFoundException;
 import org.schoolmanagement.schoolmanagement.repository.UserRepository;
 import org.schoolmanagement.schoolmanagement.security.JwtTokenProvider;
@@ -92,6 +94,26 @@ public class AuthServiceImpl implements AuthService {
         return new JwtAuthResponseDTO(token);
     }
 
+    @Override
+    public UserResponseDTO getCurrentUser(String email) {
+        var user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
+        return mapToResponseDTO(user);
+    }
+
+    @Override
+    @Transactional
+    public void changePassword(ChangePasswordRequestDTO passwordDTO, String email) {
+        var user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
+
+        if (!passwordEncoder.matches(passwordDTO.getOldPassword(), user.getPassword()))
+            throw new IncorrectPasswordException("Incorrect old password!");
+
+        user.setPassword(passwordDTO.getNewPassword());
+        userRepository.save(user);
+    }
+
     private UserResponseDTO mapToResponseDTO(User user) {
         return new UserResponseDTO(
                 user.getId(),
@@ -107,6 +129,7 @@ public class AuthServiceImpl implements AuthService {
                 user.getCreatedAt()
         );
     }
+
 
     private String generateUserIdNumber(Role role) {
         String rolePrefix = switch (role) {

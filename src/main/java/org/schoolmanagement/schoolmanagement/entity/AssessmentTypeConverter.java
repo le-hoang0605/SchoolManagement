@@ -2,6 +2,7 @@ package org.schoolmanagement.schoolmanagement.entity;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+import org.schoolmanagement.schoolmanagement.entity.enumEntity.AssessmentType;
 
 @Converter(autoApply = true)
 public class AssessmentTypeConverter implements AttributeConverter<AssessmentType, String> {
