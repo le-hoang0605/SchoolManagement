@@ -156,7 +156,7 @@ When a grade is entered, the system automatically:
 2. Verifies whether the teacher is assigned to teach that course in that section.
 
 
-3. Validates that the score satisfies $0.00 \le \text{score} \le \text{max\_score}$.
+3. Validates that the score satisfies 0.00 ≤ score ≤ max_score.
 
 
 4. Sets the `recorded_by` field using the logged-in user's ID.
