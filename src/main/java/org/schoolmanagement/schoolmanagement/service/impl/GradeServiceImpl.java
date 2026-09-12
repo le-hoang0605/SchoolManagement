@@ -10,8 +10,11 @@ import org.schoolmanagement.schoolmanagement.entity.User;
 import org.schoolmanagement.schoolmanagement.entity.enumEntity.Role;
 import org.schoolmanagement.schoolmanagement.exception.BadRequestException;
 import org.schoolmanagement.schoolmanagement.exception.ResourceNotFoundException;
+import org.schoolmanagement.schoolmanagement.exception.UserNotFoundException;
 import org.schoolmanagement.schoolmanagement.repository.*;
 import org.schoolmanagement.schoolmanagement.service.GradeService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -64,6 +67,22 @@ public class GradeServiceImpl implements GradeService {
 
         Grade savedGrade = gradeRepository.save(grade);
         return mapToDTO(savedGrade);
+    }
+
+    @Override
+    public Page<GradeResponseDTO> getGradesByStudentId(Integer studentId, String currentEmail, Pageable pageable) {
+        User currentUser = userRepository.findByEmail(currentEmail)
+                .orElseThrow(() -> new UserNotFoundException("User not found with email: " + currentEmail));
+
+        if (currentUser.getRole() == Role.student && !currentUser.getId().equals(studentId)) {
+            throw new BadRequestException("You can only view your own grades!");
+        }
+
+        if (!userRepository.existsById(studentId)) {
+            throw new UserNotFoundException("Student not found with id: " + studentId);
+        }
+        return gradeRepository.findByStudentId(studentId, pageable)
+                .map(this::mapToDTO);
     }
 
     private GradeResponseDTO mapToDTO(Grade g) {
