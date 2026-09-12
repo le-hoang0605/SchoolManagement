@@ -3,6 +3,7 @@ package org.schoolmanagement.schoolmanagement.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.schoolmanagement.schoolmanagement.dto.request.GradeRequestDTO;
+import org.schoolmanagement.schoolmanagement.dto.request.GradeUpdateRequestDTO;
 import org.schoolmanagement.schoolmanagement.dto.response.GradeResponseDTO;
 import org.schoolmanagement.schoolmanagement.service.GradeService;
 import org.springframework.data.domain.Page;
@@ -38,5 +39,31 @@ public class GradeController {
         String currentUserEmail = authentication.getName();
         Page<GradeResponseDTO> grades = gradeService.getGradesByStudentId(studentId, currentUserEmail, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(grades);
+    }
+
+    @GetMapping("/section/{sectionId}/course/{courseId}")
+    @PreAuthorize("hasAnyRole('TEACHER', 'COORDINATOR', 'ADMIN')")
+    public ResponseEntity<Page<GradeResponseDTO>> getGradesBySectionAndCourse(
+            @PathVariable Integer sectionId,
+            @PathVariable Integer courseId,
+            Authentication authentication,
+            Pageable pageable
+    ) {
+        String currentUserEmail = authentication.getName();
+        Page<GradeResponseDTO> grades = gradeService.getGradesBySectionAndCourse(sectionId, courseId, currentUserEmail, pageable);
+
+        return ResponseEntity.status(HttpStatus.OK).body(grades);
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('TEACHER', 'ADMIN')")
+    public ResponseEntity<GradeResponseDTO> updateGrade(
+            @PathVariable Integer id,
+            @Valid @RequestBody GradeUpdateRequestDTO requestDTO,
+            Authentication authentication) {
+        String currentUserEmail = authentication.getName();
+        GradeResponseDTO response = gradeService.updateGrade(id, requestDTO, currentUserEmail);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
