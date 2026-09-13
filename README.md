@@ -228,10 +228,10 @@ Public access is restricted to authentication endpoints like `/api/auth/login`.
 
 The project uses the following technologies:
 
-* Java 17+
+* Java 
 
 
-* Spring Boot 3.x
+* Spring Boot 
 
 
 * Spring Web
@@ -258,13 +258,11 @@ The project uses the following technologies:
 * Maven
 
 
-* JUnit 5
+* JUnit 
 
 
 * Mockito
 
-
-* OpenAPI / Swagger UI
 
 
 
@@ -328,7 +326,6 @@ Examples of validation rules include:
 
 
 
-Invalid requests return 400 Bad Request, missing resources return 404 Not Found, schedule collisions return 409 Conflict, and unauthorized access returns 401 or 403.
 
 ## 9. Testing
 
